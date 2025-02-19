@@ -2,12 +2,21 @@ const express = require("express");
 const app= express();
 const dotenv = require("dotenv");
 const taskRoutes = require("./routes/tast");
-const connectToDB = require("./db")
+const connectToDB = require("./db");
+const errorHandlerMiddleware = require("./config/middleware");
 dotenv.config();
 
 app.use(express.json())
 
 app.use("/api/v1/task",taskRoutes);
+
+app.use((req,res,next)=>{
+  res.status(404).json({
+    message:"Not found"
+  })
+})
+
+app.use(errorHandlerMiddleware)
 
 const PORT = process.env.PORT || 5000;
 
